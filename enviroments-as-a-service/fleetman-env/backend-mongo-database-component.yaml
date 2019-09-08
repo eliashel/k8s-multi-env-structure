@@ -1,0 +1,60 @@
+# Configuración de de despliegue e imagen del componente
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-mongo-database-component
+spec:
+  selector:
+    matchLabels:
+      app: backend-mongo-database-component
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: backend-mongo-database-component
+    spec:
+      containers:
+        - name: mongo-database
+          image: mongo:3.6-xenial # PARAM-1: Imagen y versión a desplegar de base de datos
+          #resources: #TODO: Configurar límites de uso de recursos.
+          #  limits:
+          #    memory: "200Mi"
+          #  requests:
+          #    memory: "100Mi"
+          #command: ["stress"]
+          #args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/db
+      volumes:
+        - name: mongo-persistent-storage
+          persistentVolumeClaim:
+            claimName: database-storage-pvc
+
+---
+# Requerimientos de almacenamiento para la base de datos
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: database-storage-pvc
+spec:
+  storageClassName: database-storage-ssd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 7Gi # PARAM-2: Tamaño de almacenamiento a reservar
+
+---
+# Configuración del servicio de base de datos
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-mongo-database
+spec:
+  selector:
+    app: backend-mongo-database-component
+  ports:
+    - name: mongo-database
+      port: 27017 # PARAM-3: Puerto de acceso a la base de datos
+  type: LoadBalancer
