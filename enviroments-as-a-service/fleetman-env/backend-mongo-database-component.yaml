@@ -28,22 +28,43 @@ spec:
               mountPath: /data/db
       volumes:
         - name: mongo-persistent-storage
-          persistentVolumeClaim:
-            claimName: database-storage-pvc
+          #persistentVolumeClaim:
+          #  claimName: database-storage-pvc
+          awsElasticBlockStore:
+            volumeID: vol-0664470d9772545b1 # PARAM-2: ID del volumen EBS que tiene los datos de la base de datos del ambiente
+            fsType: ext4
 
 ---
 # Requerimientos de almacenamiento para la base de datos
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: database-storage-pvc
-spec:
-  storageClassName: database-storage-ssd
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 7Gi # PARAM-2: Tamaño de almacenamiento a reservar
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: database-storage-pvc
+#spec:
+#  storageClassName: from-backup-database-storage-ssd
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 7Gi # PARAM-2: Tamaño de almacenamiento a reservar
+
+---
+# Volumen de almacenamiento para la base de datos
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: database-storage-pv
+#  labels:
+#    type: EBS
+#spec:
+#  storageClassName: from-backup-database-storage-ssd
+#  capacity:
+#    storage: 7Gi # PARAM-3: Tamaño real del volumen
+#accessModes:
+#  - ReadWriteOnce
+#awsElasticBlockStore:
+#  volumeID: vol-0664470d9772545b1 # PARAM-4: ID del volumen EBS
+#  fsType: ext4
 
 ---
 # Configuración del servicio de base de datos

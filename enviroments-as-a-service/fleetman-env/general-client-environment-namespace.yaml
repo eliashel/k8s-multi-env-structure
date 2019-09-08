@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: client-dev1 # AUTO: Nombre del espacio de nombre. Debe estar conformado la sigla del cliente y el nombre único del ambiente
+  name: agromercantil-dev1 # AUTO: Nombre del espacio de nombre. Debe estar conformado la sigla del cliente y el nombre único del ambiente
   labels:
     name: dev1 # PARAM-1: Nombre único del ambiente para el cliente.
     type-environment: development # Tipo del ambiente: development, testing
-    owner: client # PARAM-2: Sigla e identicador único del cliente.
+    owner: agromercantil # PARAM-2: Sigla e identicador único del cliente.
