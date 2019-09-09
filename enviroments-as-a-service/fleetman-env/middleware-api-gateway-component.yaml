@@ -1,0 +1,35 @@
+# Configuración de despliegue de imagen del componente
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: middleware-api-gateway-component
+spec:
+  selector:
+    matchLabels:
+      app: middleware-api-gateway-component
+  replicas: 1
+  template: # template for the pods
+    metadata:
+      labels:
+        app: middleware-api-gateway-component
+    spec:
+      containers:
+        - name: api-gateway
+          image: richardchesterwood/k8s-fleetman-api-gateway:release2 # PARAM-1: Imagen y versión del ActiveMQ
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: production-microservice # PARAM-2: SPRING_PROFILES_ACTIVE
+
+---
+# Configuración del servicio
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-api-gateway
+spec:
+  selector:
+    app: middleware-api-gateway-component
+  ports:
+    - name: http
+      port: 8080
+  type: ClusterIP

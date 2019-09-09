@@ -1,0 +1,35 @@
+# Configuración de despliegue de imagen del componente
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-webapp-ui-component
+spec:
+  selector:
+    matchLabels:
+      app: frontend-webapp-ui-component
+  replicas: 1
+  template: # template for the pods
+    metadata:
+      labels:
+        app: frontend-webapp-ui-component
+    spec:
+      containers:
+        - name: webapp
+          image: richardchesterwood/k8s-fleetman-webapp-angular:release2 # PARAM-1: Imagen y versión del componente
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: production-microservice # PARAM-2: SPRING_PROFILES_ACTIVE
+
+---
+# Configuración del servicio
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp
+spec:
+  selector:
+    app: frontend-webapp-ui-component
+  ports:
+    - name: http
+      port: 80 # PARAM-3: Puerto del servicio
+  type: LoadBalancer

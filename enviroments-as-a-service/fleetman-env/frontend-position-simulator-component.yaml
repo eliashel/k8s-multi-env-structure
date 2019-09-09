@@ -1,0 +1,21 @@
+# Configuración de despliegue de imagen del componente
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-position-simulator-component
+spec:
+  selector:
+    matchLabels:
+      app: frontend-position-simulator-component
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend-position-simulator-component
+    spec:
+      containers:
+        - name: position-simulator
+          image: richardchesterwood/k8s-fleetman-position-simulator:release2 # PARAM-1: Imagen y versión del simulador
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: production-microservice # PARAM-2: SPRING_PROFILES_ACTIVE

@@ -1,0 +1,8 @@
+# Configuración del espacio de nombres para el ambiente del cliente.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: general-client-environment-configmap
+data:
+  # Configuration values can be set as key-value properties
+  namespace: fna-desa1

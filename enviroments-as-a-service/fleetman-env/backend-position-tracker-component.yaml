@@ -1,0 +1,35 @@
+# Configuración de despliegue de imagen del componente
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-position-tracker-component
+spec:
+  selector:
+    matchLabels:
+      app: backend-position-tracker-component
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: backend-position-tracker-component
+    spec:
+      containers:
+        - name: position-tracker
+          image: richardchesterwood/k8s-fleetman-position-tracker:release3 # PARAM-1: Imagen y versión del componente
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: production-microservice # PARAM-2: SPRING_PROFILES_ACTIVE
+
+---
+# Configuración del servicio
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-position-tracker
+spec:
+  selector:
+    app: backend-position-tracker-component
+  ports:
+    - name: http
+      port: 8080 # PARAM-2: Puerto del servicio
+  type: ClusterIP

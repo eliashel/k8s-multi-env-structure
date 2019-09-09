@@ -1,0 +1,34 @@
+# Configuración de despliegue de imagen del componente
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: middleware-active-mq-component
+spec:
+  selector:
+    matchLabels:
+      app: middleware-active-mq-component
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: middleware-active-mq-component
+    spec:
+      containers:
+        - name: active-mq
+          image: richardchesterwood/k8s-fleetman-queue:release2 # PARAM-1: Imagen y versión del ActiveMQ
+
+---
+# Configuración del servicio de colas de mensajeria
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-queue
+spec:
+  selector:
+    app: middleware-active-mq-component
+  ports:
+    - name: http-console
+      port: 8161 # PARAM-2: Puerto de consola web
+    - name: endpoint
+      port: 61616 # PARAM-3: Puerto del endpoint MQ
+  type: LoadBalancer
