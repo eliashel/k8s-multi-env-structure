@@ -31,7 +31,7 @@ spec:
           #persistentVolumeClaim:
           #  claimName: database-storage-pvc
           awsElasticBlockStore:
-            volumeID: vol-0664470d9772545b1 # PARAM-2: ID del volumen EBS que tiene los datos de la base de datos del ambiente
+            volumeID: vol-0aae0337012d54484 # PARAM-2: ID del volumen EBS que tiene los datos de la base de datos del ambiente
             fsType: ext4
 
 ---
@@ -41,7 +41,8 @@ spec:
 #metadata:
 #  name: database-storage-pvc
 #spec:
-#  storageClassName: from-backup-database-storage-ssd
+  #storageClassName: from-backup-database-storage-ssd
+#  storageClassName: database-storage-ssd
 #  accessModes:
 #    - ReadWriteOnce
 #  resources:
@@ -63,8 +64,18 @@ spec:
 #accessModes:
 #  - ReadWriteOnce
 #awsElasticBlockStore:
-#  volumeID: vol-0664470d9772545b1 # PARAM-4: ID del volumen EBS
+#  volumeID: vol-050c09096df2a1d2c # PARAM-4: ID del volumen EBS
 #  fsType: ext4
+
+---
+# Tipo de almacenamiento
+#apiVersion: storage.k8s.io/v1
+#kind: StorageClass
+#metadata:
+#  name: database-storage-ssd
+#provisioner: kubernates.io/aws-ebs
+#parameters:
+#  type: gp2
 
 ---
 # Configuración del servicio de base de datos
